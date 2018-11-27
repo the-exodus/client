@@ -1572,6 +1572,13 @@
         {
           "type": [
             null,
+            "MessageID"
+          ],
+          "name": "unreadLineID"
+        },
+        {
+          "type": [
+            null,
             "Pagination"
           ],
           "name": "pagination"

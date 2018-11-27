@@ -519,6 +519,7 @@ protocol local {
 
   record ThreadView {
     array<MessageUnboxed> messages;
+    union { null, MessageID } unreadLineID;
     union { null, Pagination } pagination;
   }
 

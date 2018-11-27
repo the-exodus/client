@@ -101,6 +101,7 @@ export const updateConvRetentionPolicy = 'chat2:updateConvRetentionPolicy'
 export const updateMessages = 'chat2:updateMessages'
 export const updateMoreToLoad = 'chat2:updateMoreToLoad'
 export const updateNotificationSettings = 'chat2:updateNotificationSettings'
+export const updateOrangeLine = 'chat2:updateOrangeLine'
 export const updateReactions = 'chat2:updateReactions'
 export const updateTeamRetentionPolicy = 'chat2:updateTeamRetentionPolicy'
 export const updateTypers = 'chat2:updateTypers'
@@ -197,6 +198,7 @@ type _UpdateConvRetentionPolicyPayload = $ReadOnly<{|conv: RPCChatTypes.InboxUII
 type _UpdateMessagesPayload = $ReadOnly<{|conversationIDKey: Types.ConversationIDKey, messages: Array<{messageID: Types.MessageID, message: Types.Message}>|}>
 type _UpdateMoreToLoadPayload = $ReadOnly<{|conversationIDKey: Types.ConversationIDKey, moreToLoad: boolean|}>
 type _UpdateNotificationSettingsPayload = $ReadOnly<{|conversationIDKey: Types.ConversationIDKey, notificationsDesktop: Types.NotificationsType, notificationsMobile: Types.NotificationsType, notificationsGlobalIgnoreMentions: boolean|}>
+type _UpdateOrangeLinePayload = $ReadOnly<{|conversationIDKey: Types.ConversationIDKey, messageID: Types.MessageID|}>
 type _UpdateReactionsPayload = $ReadOnly<{|conversationIDKey: Types.ConversationIDKey, updates: Array<{targetMsgID: RPCChatTypes.MessageID, reactions: Types.Reactions}>|}>
 type _UpdateTeamRetentionPolicyPayload = $ReadOnly<{|convs: Array<RPCChatTypes.InboxUIItem>|}>
 type _UpdateTypersPayload = $ReadOnly<{|conversationToTypers: I.Map<Types.ConversationIDKey, I.Set<string>>|}>
@@ -298,6 +300,10 @@ export const createUpdateMessages = (payload: _UpdateMessagesPayload) => ({paylo
  * Update the minWriterRole stored with the conversation metadata.
  */
 export const createSaveMinWriterRole = (payload: _SaveMinWriterRolePayload) => ({payload, type: saveMinWriterRole})
+/**
+ * Update the orange line position for a conversation
+ */
+export const createUpdateOrangeLine = (payload: _UpdateOrangeLinePayload) => ({payload, type: updateOrangeLine})
 /**
  * We received payment info for a sendPayment message
  */
@@ -464,6 +470,7 @@ export type UpdateConvRetentionPolicyPayload = $Call<typeof createUpdateConvRete
 export type UpdateMessagesPayload = $Call<typeof createUpdateMessages, _UpdateMessagesPayload>
 export type UpdateMoreToLoadPayload = $Call<typeof createUpdateMoreToLoad, _UpdateMoreToLoadPayload>
 export type UpdateNotificationSettingsPayload = $Call<typeof createUpdateNotificationSettings, _UpdateNotificationSettingsPayload>
+export type UpdateOrangeLinePayload = $Call<typeof createUpdateOrangeLine, _UpdateOrangeLinePayload>
 export type UpdateReactionsPayload = $Call<typeof createUpdateReactions, _UpdateReactionsPayload>
 export type UpdateTeamRetentionPolicyPayload = $Call<typeof createUpdateTeamRetentionPolicy, _UpdateTeamRetentionPolicyPayload>
 export type UpdateTypersPayload = $Call<typeof createUpdateTypers, _UpdateTypersPayload>
@@ -559,6 +566,7 @@ export type Actions =
   | UpdateMessagesPayload
   | UpdateMoreToLoadPayload
   | UpdateNotificationSettingsPayload
+  | UpdateOrangeLinePayload
   | UpdateReactionsPayload
   | UpdateTeamRetentionPolicyPayload
   | UpdateTypersPayload
