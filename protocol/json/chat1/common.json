@@ -621,6 +621,10 @@
           "name": "maxMsgid"
         },
         {
+          "type": "MessageID",
+          "name": "orangeLineMsgid"
+        },
+        {
           "type": "ConversationMemberStatus",
           "name": "status"
         }
