@@ -35,6 +35,10 @@ func (m *MemDb) OpenTransaction() (res LocalDbTransaction, err error) {
 	return res, errors.New("not implemented")
 }
 
+func (m *MemDb) NewPrefixIterator(_ string) (res LocalDbIterator, err error) {
+	return res, errors.New("not implemented")
+}
+
 func (m *MemDb) Put(id DbKey, aliases []DbKey, value []byte) error {
 	m.Lock()
 	defer m.Unlock()

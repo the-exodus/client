@@ -9,6 +9,9 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/syndtr/goleveldb/leveldb/iterator"
+	"github.com/syndtr/goleveldb/leveldb/util"
+
 	"github.com/syndtr/goleveldb/leveldb"
 	errors "github.com/syndtr/goleveldb/leveldb/errors"
 	"github.com/syndtr/goleveldb/leveldb/filter"
@@ -302,6 +305,18 @@ func (l *LevelDb) Delete(id DbKey) error {
 
 	return err
 }
+
+func (l *LevelDb) NewPrefixIterator(prefix string) (LocalDbIterator, error) {
+	return LevelDbIterator{
+		Iterator: l.db.NewIterator(util.BytesPrefix([]byte(prefix)), nil),
+	}, nil
+}
+
+type LevelDbIterator struct {
+	iterator.Iterator
+}
+
+var _ (LocalDbIterator) = (*LevelDbIterator)(nil)
 
 func (l *LevelDb) OpenTransaction() (LocalDbTransaction, error) {
 	var (

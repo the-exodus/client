@@ -134,6 +134,14 @@ type LocalDbTransaction interface {
 	Discard()
 }
 
+type LocalDbIterator interface {
+	Next() bool
+	Prev() bool
+
+	Value() []byte
+	Error() error
+}
+
 type LocalDb interface {
 	LocalDbOps
 	Open() error
@@ -141,6 +149,7 @@ type LocalDb interface {
 	Close() error
 	Nuke() (string, error)
 	OpenTransaction() (LocalDbTransaction, error)
+	NewPrefixIterator(prefix string) (LocalDbIterator, error)
 }
 
 type KVStorer interface {
