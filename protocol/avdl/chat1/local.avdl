@@ -434,6 +434,7 @@ protocol local {
   }
 
   record ConversationLocalParticipant {
+    gregor1.UID uid;
     string username;
     union { null, string } fullname;
   }

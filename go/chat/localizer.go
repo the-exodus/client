@@ -856,9 +856,9 @@ func (s *localizerPipeline) localizeConversation(ctx context.Context, uid gregor
 		if err != nil {
 			s.Debug(ctx, "localizeConversation: UIDMapper returned an error: %s", err)
 		}
-		for _, row := range rows {
+		for index, row := range rows {
 			conversationLocal.Info.Participants = append(conversationLocal.Info.Participants,
-				utils.UsernamePackageToParticipant(row))
+				utils.UsernamePackageToParticipant(conversationRemote.Metadata.AllList[index], row))
 		}
 		// Sort alphabetically
 		sort.Slice(conversationLocal.Info.Participants, func(i, j int) bool {

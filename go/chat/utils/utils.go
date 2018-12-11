@@ -128,55 +128,46 @@ func AggRateLimits(rlimits []chat1.RateLimit) (res []chat1.RateLimit) {
 // Only allows usernames from tlfname in the output.
 // This never fails, worse comes to worst it just returns the split of tlfname.
 func ReorderParticipants(mctx libkb.MetaContext, g libkb.UIDMapperContext, umapper libkb.UIDMapper,
-	tlfname string, activeList []gregor1.UID) (writerNames []chat1.ConversationLocalParticipant, err error) {
+	tlfname string, allList, activeList []gregor1.UID) (writerNames []chat1.ConversationLocalParticipant, err error) {
 	srcWriterNames, _, _, err := splitAndNormalizeTLFNameCanonicalize(mctx.G(), tlfname, false)
 	if err != nil {
 		return writerNames, err
 	}
-	var activeKuids []keybase1.UID
-	for _, a := range activeList {
-		activeKuids = append(activeKuids, keybase1.UID(a.String()))
+	var allKuids []keybase1.UID
+	for _, a := range allList {
+		allKuids = append(allKuids, keybase1.UID(a.String()))
 	}
-	packages, err := umapper.MapUIDsToUsernamePackages(mctx.Ctx(), g, activeKuids, time.Hour*24, 10*time.Second,
-		true)
-	activeMap := make(map[string]chat1.ConversationLocalParticipant)
+	packages, err := umapper.MapUIDsToUsernamePackages(mctx.Ctx(), g, allKuids, time.Hour*24,
+		10*time.Second, true)
+	allMap := make(map[string]chat1.ConversationLocalParticipant)
 	if err == nil {
-		for i := 0; i < len(activeKuids); i++ {
-			activeMap[activeKuids[i].String()] = UsernamePackageToParticipant(packages[i])
+		for i := 0; i < len(allKuids); i++ {
+			allMap[allKuids[i].String()] = UsernamePackageToParticipant(allKuids[i].ToBytes(),
+				packages[i])
 		}
 	}
-	allowedWriters := make(map[string]bool)
-
 	// Allow all writers from tlfname.
+	allowedWriters := make(map[string]bool)
 	for _, user := range srcWriterNames {
 		allowedWriters[user] = true
 	}
-
-	// Fill from the active list first.
-	for _, uid := range activeList {
-		kbUID := keybase1.UID(uid.String())
-		p, ok := activeMap[kbUID.String()]
-		if !ok {
-			continue
-		}
-		if allowed, _ := allowedWriters[p.Username]; allowed {
-			writerNames = append(writerNames, p)
-			// Allow only one occurrence.
-			allowedWriters[p.Username] = false
-		}
-	}
-
-	// Include participants even if they weren't in the active list, in stable order.
-	for _, user := range srcWriterNames {
-		if allowed, _ := allowedWriters[user]; allowed {
-			writerNames = append(writerNames, UsernamePackageToParticipant(libkb.UsernamePackage{
-				NormalizedUsername: libkb.NewNormalizedUsername(user),
-				FullName:           nil,
-			}))
-			allowedWriters[user] = false
+	addParts := func(l []gregor1.UID) {
+		for _, uid := range l {
+			kbUID := keybase1.UID(uid.String())
+			p, ok := allMap[kbUID.String()]
+			if !ok {
+				continue
+			}
+			delete(allMap, kbUID.String())
+			if allowed, _ := allowedWriters[p.Username]; allowed {
+				writerNames = append(writerNames, p)
+				// Allow only one occurrence.
+				allowedWriters[p.Username] = false
+			}
 		}
 	}
-
+	addParts(activeList)
+	addParts(allList)
 	return writerNames, nil
 }
 
@@ -1524,13 +1515,14 @@ func SplitTLFName(tlfName string) []string {
 	return strings.Split(strings.Fields(tlfName)[0], ",")
 }
 
-func UsernamePackageToParticipant(p libkb.UsernamePackage) chat1.ConversationLocalParticipant {
+func UsernamePackageToParticipant(uid gregor1.UID, p libkb.UsernamePackage) chat1.ConversationLocalParticipant {
 	var fullName *string
 	if p.FullName != nil {
 		s := string(p.FullName.FullName)
 		fullName = &s
 	}
 	return chat1.ConversationLocalParticipant{
+		Uid:      uid,
 		Username: p.NormalizedUsername.String(),
 		Fullname: fullName,
 	}

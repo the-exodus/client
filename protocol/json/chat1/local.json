@@ -1308,6 +1308,10 @@
       "name": "ConversationLocalParticipant",
       "fields": [
         {
+          "type": "gregor1.UID",
+          "name": "uid"
+        },
+        {
           "type": "string",
           "name": "username"
         },
