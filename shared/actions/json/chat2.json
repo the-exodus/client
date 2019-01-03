@@ -524,6 +524,11 @@
     "confirmScreenResponse": {
       "_description": "User responded to the chat Stellar confirm screen",
       "accept": "boolean"
+    },
+    "clearUnsentText": {
+      "_description": "Clear unsent text for a conv",
+      "conversationIDKey": "Types.ConversationIDKey",
+      "clear": "boolean"
     }
   }
 }

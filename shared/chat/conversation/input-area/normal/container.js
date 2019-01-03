@@ -41,6 +41,7 @@ const mapStateToProps = (state, {conversationIDKey}: OwnProps) => {
     _editOrdinal: editInfo ? editInfo.ordinal : null,
     _isExplodingModeLocked: Constants.isExplodingModeLocked(state, conversationIDKey),
     _you,
+    clearUnsentText: state.chat2.clearUnsentTextMap.get(conversationIDKey) || false,
     conversationIDKey,
     editText: editInfo ? editInfo.text : '',
     explodingModeSeconds,
@@ -92,6 +93,8 @@ const mapDispatchToProps = dispatch => ({
     // only valid conversations
     conversationIDKey &&
     dispatch(Chat2Gen.createSendTyping({conversationIDKey, text: new HiddenString(text)})),
+  _undoClearText: (conversationIDKey: Types.ConversationIDKey) =>
+    dispatch(Chat2Gen.createClearUnsentText({clear: false, conversationIDKey})),
   clearInboxFilter: () => dispatch(Chat2Gen.createSetInboxFilter({filter: ''})),
   onFilePickerError: (error: Error) => dispatch(ConfigGen.createFilePickerError({error})),
   onSeenExplodingMessages: () => dispatch(Chat2Gen.createHandleSeeingExplodingMessages()),
@@ -101,6 +104,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mergeProps = (stateProps, dispatchProps, ownProps: OwnProps): Props => ({
   clearInboxFilter: dispatchProps.clearInboxFilter,
+  clearUnsentText: stateProps.clearUnsentText,
   conversationIDKey: stateProps.conversationIDKey,
   editText: stateProps.editText,
   explodingModeSeconds: stateProps.explodingModeSeconds,
@@ -133,6 +137,9 @@ const mergeProps = (stateProps, dispatchProps, ownProps: OwnProps): Props => ({
       // if it's locked and we want to unset, unset it
       // alternatively, if it's not locked and we want to set it, set it
       dispatchProps.onSetExplodingModeLock(stateProps.conversationIDKey, unset)
+    }
+    if (!unset && stateProps.clearUnsentText) {
+      dispatchProps._undoClearText(stateProps.conversationIDKey)
     }
     setUnsentText(stateProps.conversationIDKey, text)
   },

@@ -28,6 +28,7 @@ export const attachmentsUpload = 'chat2:attachmentsUpload'
 export const badgesUpdated = 'chat2:badgesUpdated'
 export const blockConversation = 'chat2:blockConversation'
 export const clearPaymentConfirmInfo = 'chat2:clearPaymentConfirmInfo'
+export const clearUnsentText = 'chat2:clearUnsentText'
 export const confirmScreenResponse = 'chat2:confirmScreenResponse'
 export const createConversation = 'chat2:createConversation'
 export const desktopNotification = 'chat2:desktopNotification'
@@ -123,6 +124,7 @@ type _AttachmentsUploadPayload = $ReadOnly<{|conversationIDKey: Types.Conversati
 type _BadgesUpdatedPayload = $ReadOnly<{|conversations: Array<RPCTypes.BadgeConversationInfo>|}>
 type _BlockConversationPayload = $ReadOnly<{|conversationIDKey: Types.ConversationIDKey, reportUser: boolean|}>
 type _ClearPaymentConfirmInfoPayload = void
+type _ClearUnsentTextPayload = $ReadOnly<{|conversationIDKey: Types.ConversationIDKey, clear: boolean|}>
 type _ConfirmScreenResponsePayload = $ReadOnly<{|accept: boolean|}>
 type _CreateConversationPayload = $ReadOnly<{|participants: Array<string>|}>
 type _DesktopNotificationPayload = $ReadOnly<{|conversationIDKey: Types.ConversationIDKey, author: string, body: string|}>
@@ -219,6 +221,10 @@ export const createUnfurlTogglePrompt = (payload: _UnfurlTogglePromptPayload) =>
  * Clear data for payment confirm modal
  */
 export const createClearPaymentConfirmInfo = (payload: _ClearPaymentConfirmInfoPayload) => ({payload, type: clearPaymentConfirmInfo})
+/**
+ * Clear unsent text for a conv
+ */
+export const createClearUnsentText = (payload: _ClearUnsentTextPayload) => ({payload, type: clearUnsentText})
 /**
  * Consume a service notification that a conversation's retention policy has been updated
  */
@@ -405,6 +411,7 @@ export type AttachmentsUploadPayload = {|+payload: _AttachmentsUploadPayload, +t
 export type BadgesUpdatedPayload = {|+payload: _BadgesUpdatedPayload, +type: 'chat2:badgesUpdated'|}
 export type BlockConversationPayload = {|+payload: _BlockConversationPayload, +type: 'chat2:blockConversation'|}
 export type ClearPaymentConfirmInfoPayload = {|+payload: _ClearPaymentConfirmInfoPayload, +type: 'chat2:clearPaymentConfirmInfo'|}
+export type ClearUnsentTextPayload = {|+payload: _ClearUnsentTextPayload, +type: 'chat2:clearUnsentText'|}
 export type ConfirmScreenResponsePayload = {|+payload: _ConfirmScreenResponsePayload, +type: 'chat2:confirmScreenResponse'|}
 export type CreateConversationPayload = {|+payload: _CreateConversationPayload, +type: 'chat2:createConversation'|}
 export type DesktopNotificationPayload = {|+payload: _DesktopNotificationPayload, +type: 'chat2:desktopNotification'|}
@@ -503,6 +510,7 @@ export type Actions =
   | BadgesUpdatedPayload
   | BlockConversationPayload
   | ClearPaymentConfirmInfoPayload
+  | ClearUnsentTextPayload
   | ConfirmScreenResponsePayload
   | CreateConversationPayload
   | DesktopNotificationPayload

@@ -48,6 +48,7 @@ export type _State = {
     I.Map<RPCChatTypes.MessageID, Message.ChatRequestInfo | Message.ChatPaymentInfo>
   >, // temp cache for requestPayment and sendPayment message data
   badgeMap: ConversationCountMap, // id to the badge count
+  clearUnsentTextMap: I.Map<Common.ConversationIDKey, boolean>,
   editingMap: I.Map<Common.ConversationIDKey, Message.Ordinal>, // current message being edited
   inboxFilter: string, // filters 'jump to chat'
   inboxHasLoaded: boolean, // if we've ever loaded

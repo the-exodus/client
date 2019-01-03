@@ -119,7 +119,6 @@ class Input extends React.Component<InputProps, InputState> {
 
   _onSubmit = (text: string) => {
     this.props.onSubmit(text)
-    this._setText('')
   }
 
   _onChangeText = (text: string) => {
@@ -207,6 +206,11 @@ class Input extends React.Component<InputProps, InputState> {
       this._setText(text, true)
       // TODO: Ideally, we'd also stash and restore the selection.
       this._inputFocus()
+    }
+
+    // If we are force clearing text, then blast it away here
+    if (this.props.clearUnsentText) {
+      this._setText('', true)
     }
   }
 

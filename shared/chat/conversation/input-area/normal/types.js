@@ -9,6 +9,7 @@ import {PlainInput} from '../../../../common-adapters'
 //     PlatformInput, with props PlatformInputProps.
 
 type CommonProps = {|
+  clearUnsentText: boolean,
   conversationIDKey: Types.ConversationIDKey,
   isEditExploded: boolean,
   isEditing: boolean,

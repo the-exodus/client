@@ -873,6 +873,8 @@ const rootReducer = (
         return state.update('explodingModeLocks', el => el.delete(conversationIDKey))
       }
       return alreadyLocked ? state : state.setIn(['explodingModeLocks', conversationIDKey], mode)
+    case Chat2Gen.clearUnsentText:
+      return state.setIn(['clearUnsentTextMap', action.payload.conversationIDKey], action.payload.clear)
     case Chat2Gen.setExplodingMessagesNew:
       return state.set('isExplodingNew', action.payload.new)
     case Chat2Gen.staticConfigLoaded:
