@@ -1283,6 +1283,7 @@ function* messageSend(state, action) {
       waitingKey: Constants.waitingKeyPost,
     })
     logger.info('[MessageSend] success')
+    yield Saga.put(Chat2Gen.createClearUnsentText({clear: true, conversationIDKey}))
   } catch (e) {
     logger.info('[MessageSend] error')
   }
