@@ -125,6 +125,26 @@ func (o GetInboxRemoteRes) DeepCopy() GetInboxRemoteRes {
 	}
 }
 
+type GetInboxFactoredRemoteRes struct {
+	PersonInbox  InboxView  `codec:"personInbox" json:"personInbox"`
+	BigteamInbox InboxView  `codec:"bigteamInbox" json:"bigteamInbox"`
+	RateLimit    *RateLimit `codec:"rateLimit,omitempty" json:"rateLimit,omitempty"`
+}
+
+func (o GetInboxFactoredRemoteRes) DeepCopy() GetInboxFactoredRemoteRes {
+	return GetInboxFactoredRemoteRes{
+		PersonInbox:  o.PersonInbox.DeepCopy(),
+		BigteamInbox: o.BigteamInbox.DeepCopy(),
+		RateLimit: (func(x *RateLimit) *RateLimit {
+			if x == nil {
+				return nil
+			}
+			tmp := (*x).DeepCopy()
+			return &tmp
+		})(o.RateLimit),
+	}
+}
+
 type GetInboxByTLFIDRemoteRes struct {
 	Convs     []Conversation `codec:"convs" json:"convs"`
 	RateLimit *RateLimit     `codec:"rateLimit,omitempty" json:"rateLimit,omitempty"`
@@ -790,6 +810,12 @@ type GetInboxRemoteArg struct {
 	Pagination *Pagination    `codec:"pagination,omitempty" json:"pagination,omitempty"`
 }
 
+type GetInboxFactoredRemoteArg struct {
+	Vers       InboxVers      `codec:"vers" json:"vers"`
+	Query      *GetInboxQuery `codec:"query,omitempty" json:"query,omitempty"`
+	Pagination *Pagination    `codec:"pagination,omitempty" json:"pagination,omitempty"`
+}
+
 type GetThreadRemoteArg struct {
 	ConversationID ConversationID  `codec:"conversationID" json:"conversationID"`
 	Reason         GetThreadReason `codec:"reason" json:"reason"`
@@ -985,6 +1011,7 @@ type BroadcastGregorMessageToConvArg struct {
 
 type RemoteInterface interface {
 	GetInboxRemote(context.Context, GetInboxRemoteArg) (GetInboxRemoteRes, error)
+	GetInboxFactoredRemote(context.Context, GetInboxFactoredRemoteArg) (GetInboxFactoredRemoteRes, error)
 	GetThreadRemote(context.Context, GetThreadRemoteArg) (GetThreadRemoteRes, error)
 	GetPublicConversations(context.Context, GetPublicConversationsArg) (GetPublicConversationsRes, error)
 	PostRemote(context.Context, PostRemoteArg) (PostRemoteRes, error)
@@ -1039,6 +1066,21 @@ func RemoteProtocol(i RemoteInterface) rpc.Protocol {
 						return
 					}
 					ret, err = i.GetInboxRemote(ctx, typedArgs[0])
+					return
+				},
+			},
+			"getInboxFactoredRemote": {
+				MakeArg: func() interface{} {
+					var ret [1]GetInboxFactoredRemoteArg
+					return &ret
+				},
+				Handler: func(ctx context.Context, args interface{}) (ret interface{}, err error) {
+					typedArgs, ok := args.(*[1]GetInboxFactoredRemoteArg)
+					if !ok {
+						err = rpc.NewTypeError((*[1]GetInboxFactoredRemoteArg)(nil), args)
+						return
+					}
+					ret, err = i.GetInboxFactoredRemote(ctx, typedArgs[0])
 					return
 				},
 			},
@@ -1587,6 +1629,11 @@ type RemoteClient struct {
 
 func (c RemoteClient) GetInboxRemote(ctx context.Context, __arg GetInboxRemoteArg) (res GetInboxRemoteRes, err error) {
 	err = c.Cli.CallCompressed(ctx, "chat.1.remote.getInboxRemote", []interface{}{__arg}, &res, rpc.CompressionGzip)
+	return
+}
+
+func (c RemoteClient) GetInboxFactoredRemote(ctx context.Context, __arg GetInboxFactoredRemoteArg) (res GetInboxFactoredRemoteRes, err error) {
+	err = c.Cli.CallCompressed(ctx, "chat.1.remote.getInboxFactoredRemote", []interface{}{__arg}, &res, rpc.CompressionGzip)
 	return
 }
 

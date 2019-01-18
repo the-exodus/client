@@ -100,6 +100,27 @@
     },
     {
       "type": "record",
+      "name": "GetInboxFactoredRemoteRes",
+      "fields": [
+        {
+          "type": "InboxView",
+          "name": "personInbox"
+        },
+        {
+          "type": "InboxView",
+          "name": "bigteamInbox"
+        },
+        {
+          "type": [
+            null,
+            "RateLimit"
+          ],
+          "name": "rateLimit"
+        }
+      ]
+    },
+    {
+      "type": "record",
       "name": "GetInboxByTLFIDRemoteRes",
       "fields": [
         {
@@ -614,6 +635,29 @@
         }
       ],
       "response": "GetInboxRemoteRes"
+    },
+    "getInboxFactoredRemote": {
+      "request": [
+        {
+          "name": "vers",
+          "type": "InboxVers"
+        },
+        {
+          "name": "query",
+          "type": [
+            null,
+            "GetInboxQuery"
+          ]
+        },
+        {
+          "name": "pagination",
+          "type": [
+            null,
+            "Pagination"
+          ]
+        }
+      ],
+      "response": "GetInboxFactoredRemoteRes"
     },
     "getThreadRemote": {
       "request": [
