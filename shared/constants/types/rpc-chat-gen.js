@@ -84,6 +84,12 @@ export const commonInboxResType = {
   full: 1,
 }
 
+export const commonMaxMsgSummaryMode = {
+  all: 0,
+  summarize: 1,
+  hybrid: 2,
+}
+
 export const commonMessageType = {
   none: 0,
   text: 1,

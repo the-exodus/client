@@ -331,6 +331,15 @@
       ]
     },
     {
+      "type": "enum",
+      "name": "MaxMsgSummaryMode",
+      "symbols": [
+        "ALL_0",
+        "SUMMARIZE_1",
+        "HYBRID_2"
+      ]
+    },
+    {
       "type": "record",
       "name": "GetInboxQuery",
       "fields": [
@@ -433,6 +442,13 @@
         {
           "type": "boolean",
           "name": "summarizeMaxMsgs"
+        },
+        {
+          "type": [
+            null,
+            "MaxMsgSummaryMode"
+          ],
+          "name": "maxMsgSummaryMode"
         },
         {
           "type": "boolean",

@@ -440,6 +440,12 @@ export const commonInboxResType = {
   full: 1,
 }
 
+export const commonMaxMsgSummaryMode = {
+  all: 0,
+  summarize: 1,
+  hybrid: 2,
+}
+
 export const commonMessageType = {
   none: 0,
   text: 1,
@@ -805,7 +811,7 @@ export type GetInboxAndUnboxLocalRes = $ReadOnly<{conversations?: ?Array<Convers
 export type GetInboxAndUnboxUILocalRes = $ReadOnly<{conversations?: ?Array<InboxUIItem>, pagination?: ?Pagination, offline: Boolean, rateLimits?: ?Array<RateLimit>, identifyFailures?: ?Array<Keybase1.TLFIdentifyFailure>}>
 export type GetInboxByTLFIDRemoteRes = $ReadOnly<{convs?: ?Array<Conversation>, rateLimit?: ?RateLimit}>
 export type GetInboxLocalQuery = $ReadOnly<{name?: ?NameQuery, topicName?: ?String, convIDs?: ?Array<ConversationID>, topicType?: ?TopicType, tlfVisibility?: ?Keybase1.TLFVisibility, before?: ?Gregor1.Time, after?: ?Gregor1.Time, oneChatTypePerTLF?: ?Boolean, status?: ?Array<ConversationStatus>, unreadOnly: Boolean, readOnly: Boolean, computeActiveList: Boolean}>
-export type GetInboxQuery = $ReadOnly<{convID?: ?ConversationID, topicType?: ?TopicType, tlfID?: ?TLFID, tlfVisibility?: ?Keybase1.TLFVisibility, before?: ?Gregor1.Time, after?: ?Gregor1.Time, oneChatTypePerTLF?: ?Boolean, status?: ?Array<ConversationStatus>, memberStatus?: ?Array<ConversationMemberStatus>, existences?: ?Array<ConversationExistence>, membersTypes?: ?Array<ConversationMembersType>, convIDs?: ?Array<ConversationID>, unreadOnly: Boolean, readOnly: Boolean, computeActiveList: Boolean, summarizeMaxMsgs: Boolean, skipBgLoads: Boolean}>
+export type GetInboxQuery = $ReadOnly<{convID?: ?ConversationID, topicType?: ?TopicType, tlfID?: ?TLFID, tlfVisibility?: ?Keybase1.TLFVisibility, before?: ?Gregor1.Time, after?: ?Gregor1.Time, oneChatTypePerTLF?: ?Boolean, status?: ?Array<ConversationStatus>, memberStatus?: ?Array<ConversationMemberStatus>, existences?: ?Array<ConversationExistence>, membersTypes?: ?Array<ConversationMembersType>, convIDs?: ?Array<ConversationID>, unreadOnly: Boolean, readOnly: Boolean, computeActiveList: Boolean, summarizeMaxMsgs: Boolean, maxMsgSummaryMode?: ?MaxMsgSummaryMode, skipBgLoads: Boolean}>
 export type GetInboxRemoteRes = $ReadOnly<{inbox: InboxView, rateLimit?: ?RateLimit}>
 export type GetInboxSummaryForCLILocalQuery = $ReadOnly<{topicType: TopicType, after: String, before: String, visibility: Keybase1.TLFVisibility, status?: ?Array<ConversationStatus>, unreadFirst: Boolean, unreadFirstLimit: UnreadFirstNumLimit, activitySortedLimit: Int}>
 export type GetInboxSummaryForCLILocalRes = $ReadOnly<{conversations?: ?Array<ConversationLocal>, offline: Boolean, rateLimits?: ?Array<RateLimit>}>
@@ -881,6 +887,11 @@ export type KBFSImpteamUpgradeUpdate = $ReadOnly<{convID: ConversationID, inboxV
 export type MakePreviewRes = $ReadOnly<{mimeType: String, previewMimeType?: ?String, location?: ?PreviewLocation, metadata?: ?AssetMetadata, baseMetadata?: ?AssetMetadata}>
 export type MarkAsReadLocalRes = $ReadOnly<{offline: Boolean, rateLimits?: ?Array<RateLimit>}>
 export type MarkAsReadRes = $ReadOnly<{rateLimit?: ?RateLimit}>
+export type MaxMsgSummaryMode =
+  | 0 // ALL_0
+  | 1 // SUMMARIZE_1
+  | 2 // HYBRID_2
+
 export type MemberInfo = $ReadOnly<{member: String, status: ConversationMemberStatus}>
 export type MembersUpdateInfo = $ReadOnly<{convID: ConversationID, members?: ?Array<MemberInfo>}>
 export type MerkleRoot = $ReadOnly<{seqno: Long, hash: Bytes}>

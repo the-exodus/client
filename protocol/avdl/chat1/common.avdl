@@ -163,6 +163,12 @@
     int maxCalls; // Max amount of calls allowed in a window for the given RPC
   }
 
+  enum MaxMsgSummaryMode {
+    ALL_0, // return all max msgs with all their data
+    SUMMARIZE_1, // return only the metadata of the max msgs
+    HYBRID_2 // return all max msg data for first K, and summaries for everything else
+  }
+
   record GetInboxQuery {
     union { null, ConversationID } convID;
     union { null, TopicType } topicType;
@@ -188,7 +194,9 @@
     boolean unreadOnly;
     boolean readOnly;
     boolean computeActiveList;
-    boolean summarizeMaxMsgs; // if true, resulting conversation will only have summaries of max msgs
+    // used by old clients, sets maxMsgSummaryMode == SUMMARIZE if maxMsgSummaryMode is unset
+    boolean summarizeMaxMsgs;
+    union { null, MaxMsgSummaryMode } maxMsgSummaryMode;
     boolean skipBgLoads; // optionally skip queuing the conversation in the background loader.
   }
 

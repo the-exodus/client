@@ -488,16 +488,22 @@ func (s *HybridInboxSource) fetchRemoteInbox(ctx context.Context, uid gregor1.UI
 	// full list for the conversations that come back
 	var rquery chat1.GetInboxQuery
 	if query == nil {
+		hybrid := chat1.MaxMsgSummaryMode_HYBRID
 		rquery = chat1.GetInboxQuery{
 			ComputeActiveList: true,
-			SummarizeMaxMsgs:  false,
+			MaxMsgSummaryMode: &hybrid,
 		}
 	} else {
 		rquery = *query
 		rquery.ComputeActiveList = true
 		// If we have been given a fixed set of conversation IDs, then just return summary, since
 		// we likely have the messages cached locally.
-		rquery.SummarizeMaxMsgs = len(rquery.ConvIDs) > 0 || rquery.ConvID != nil
+		rquery.MaxMsgSummaryMode = new(chat1.MaxMsgSummaryMode)
+		if len(rquery.ConvIDs) > 0 || rquery.ConvID != nil {
+			*rquery.MaxMsgSummaryMode = chat1.MaxMsgSummaryMode_SUMMARIZE
+		} else {
+			*rquery.MaxMsgSummaryMode = chat1.MaxMsgSummaryMode_HYBRID
+		}
 	}
 
 	ib, err := s.getChatInterface().GetInboxRemote(ctx, chat1.GetInboxRemoteArg{

@@ -582,6 +582,35 @@ func (o RateLimit) DeepCopy() RateLimit {
 	}
 }
 
+type MaxMsgSummaryMode int
+
+const (
+	MaxMsgSummaryMode_ALL       MaxMsgSummaryMode = 0
+	MaxMsgSummaryMode_SUMMARIZE MaxMsgSummaryMode = 1
+	MaxMsgSummaryMode_HYBRID    MaxMsgSummaryMode = 2
+)
+
+func (o MaxMsgSummaryMode) DeepCopy() MaxMsgSummaryMode { return o }
+
+var MaxMsgSummaryModeMap = map[string]MaxMsgSummaryMode{
+	"ALL":       0,
+	"SUMMARIZE": 1,
+	"HYBRID":    2,
+}
+
+var MaxMsgSummaryModeRevMap = map[MaxMsgSummaryMode]string{
+	0: "ALL",
+	1: "SUMMARIZE",
+	2: "HYBRID",
+}
+
+func (e MaxMsgSummaryMode) String() string {
+	if v, ok := MaxMsgSummaryModeRevMap[e]; ok {
+		return v
+	}
+	return ""
+}
+
 type GetInboxQuery struct {
 	ConvID            *ConversationID            `codec:"convID,omitempty" json:"convID,omitempty"`
 	TopicType         *TopicType                 `codec:"topicType,omitempty" json:"topicType,omitempty"`
@@ -599,6 +628,7 @@ type GetInboxQuery struct {
 	ReadOnly          bool                       `codec:"readOnly" json:"readOnly"`
 	ComputeActiveList bool                       `codec:"computeActiveList" json:"computeActiveList"`
 	SummarizeMaxMsgs  bool                       `codec:"summarizeMaxMsgs" json:"summarizeMaxMsgs"`
+	MaxMsgSummaryMode *MaxMsgSummaryMode         `codec:"maxMsgSummaryMode,omitempty" json:"maxMsgSummaryMode,omitempty"`
 	SkipBgLoads       bool                       `codec:"skipBgLoads" json:"skipBgLoads"`
 }
 
@@ -712,7 +742,14 @@ func (o GetInboxQuery) DeepCopy() GetInboxQuery {
 		ReadOnly:          o.ReadOnly,
 		ComputeActiveList: o.ComputeActiveList,
 		SummarizeMaxMsgs:  o.SummarizeMaxMsgs,
-		SkipBgLoads:       o.SkipBgLoads,
+		MaxMsgSummaryMode: (func(x *MaxMsgSummaryMode) *MaxMsgSummaryMode {
+			if x == nil {
+				return nil
+			}
+			tmp := (*x).DeepCopy()
+			return &tmp
+		})(o.MaxMsgSummaryMode),
+		SkipBgLoads: o.SkipBgLoads,
 	}
 }
 
