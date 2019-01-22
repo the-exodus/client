@@ -65,6 +65,12 @@ export const unverifiedInboxUIItemToConversationMeta = (
   const supersedes = conversationMetadataToMetaSupersedeInfo(i.supersedes)
   const teamname = i.membersType === RPCChatTypes.commonConversationMembersType.team ? i.name : ''
 
+  const {
+    notificationsDesktop,
+    notificationsGlobalIgnoreMentions,
+    notificationsMobile,
+  } = parseNotificationSettings(i.notifications)
+
   return makeConversationMeta({
     channelname,
     commands: i.commands,
@@ -74,6 +80,9 @@ export const unverifiedInboxUIItemToConversationMeta = (
     maxMsgID: i.maxMsgID,
     maxVisibleMsgID: i.maxVisibleMsgID,
     membershipType: conversationMemberStatusToMembershipType(i.memberStatus),
+    notificationsDesktop,
+    notificationsGlobalIgnoreMentions,
+    notificationsMobile,
     participants,
     readMsgID: i.readMsgID,
     resetParticipants,

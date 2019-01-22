@@ -42,6 +42,8 @@ const mapDispatchToProps = (dispatch, {path}: OwnProps) => ({
   ...(isMobile
     ? {
         _saveMedia: () => dispatch(FsGen.createSaveMedia(Constants.makeDownloadPayload(path))),
+        _sendAttachment: () => dispatch(FsGen.createShowSendAttachmentToChat({path})),
+        _sendLink: () => dispatch(FsGen.createShowSendLinkToChat({path})),
         _shareNative: () => dispatch(FsGen.createShareNative(Constants.makeDownloadPayload(path))),
       }
     : {
@@ -56,14 +58,16 @@ const mapDispatchToProps = (dispatch, {path}: OwnProps) => ({
 })
 
 type actions = {
-  showInSystemFileManager?: () => void,
-  ignoreFolder?: () => void,
-  saveMedia?: (() => void) | 'disabled',
-  shareNative?: (() => void) | 'disabled',
-  download?: () => void,
   copyPath?: () => void,
   deleteFileOrFolder?: () => void,
+  download?: () => void,
+  ignoreFolder?: () => void,
   moveOrCopy?: () => void,
+  saveMedia?: (() => void) | 'disabled',
+  sendAttachment?: () => void,
+  sendLink?: () => void,
+  shareNative?: (() => void) | 'disabled',
+  showInSystemFileManager?: () => void,
 }
 type MenuItemAppender = (
   menuActions: actions,
@@ -126,10 +130,20 @@ const aMoveOrCopy: MenuItemAppender = (menuActions, stateProps, dispatchProps, p
   menuActions.moveOrCopy = dispatchProps.moveOrCopy
 }
 
+const aSendAttachment: MenuItemAppender = (menuActions, stateProps, dispatchProps, path) => {
+  menuActions.sendAttachment = isMobile ? dispatchProps._sendAttachment : undefined
+}
+
+const aSendLink: MenuItemAppender = (menuActions, stateProps, dispatchProps, path) => {
+  menuActions.sendLink = isMobile ? dispatchProps._sendLink : undefined
+}
+
 const tlfListAppenders: Array<MenuItemAppender> = [aShowIn, aCopyPath]
-const tlfAppenders: Array<MenuItemAppender> = [aShowIn, aIgnore, aCopyPath]
+const tlfAppenders: Array<MenuItemAppender> = [aShowIn, aIgnore, aCopyPath, aSendLink]
 const inTlfAppenders: Array<MenuItemAppender> = [
   aShowIn,
+  aSendLink,
+  aSendAttachment,
   aSave,
   aShareNative,
   aDownload,
@@ -198,6 +212,8 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
   const {
     showInSystemFileManager,
     ignoreFolder,
+    sendAttachment,
+    sendLink,
     saveMedia,
     shareNative,
     download,
@@ -228,6 +244,8 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     path,
     pathElements,
     saveMedia,
+    sendAttachment,
+    sendLink,
     shareNative,
     showInSystemFileManager,
     size: pathItem.size,

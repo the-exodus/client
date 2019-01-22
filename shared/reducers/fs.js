@@ -284,6 +284,11 @@ export default function(state: Types.State = initialState, action: FsGen.Actions
       return state.update('moveOrCopy', mc =>
         mc.update('destinationParentPath', list => list.set(action.payload.index, action.payload.path))
       )
+    case FsGen.showSendAttachmentToChat:
+      return state.set(
+        'sendAttachmentToChat',
+        Constants.makeSendAttachmentToChat({path: action.payload.path})
+      )
     case FsGen.showSendLinkToChat:
       return state.set('sendLinkToChat', Constants.makeSendLinkToChat({path: action.payload.path}))
     case FsGen.setSendLinkToChatConvID:
@@ -292,6 +297,13 @@ export default function(state: Types.State = initialState, action: FsGen.Actions
     case FsGen.setSendLinkToChatChannels:
       // $FlowIssue
       return state.setIn(['sendLinkToChat', 'channels'], action.payload.channels)
+    case FsGen.setSendAttachmentToChatConvID:
+      // $FlowIssue
+      return state.setIn(['sendAttachmentToChat', 'convID'], action.payload.convID)
+    case FsGen.setSendAttachmentToChatFilter:
+      // $FlowIssue
+      return state.setIn(['sendAttachmentToChat', 'filter'], action.payload.filter)
+
     case FsGen.folderListLoad:
     case FsGen.placeholderAction:
     case FsGen.filePreviewLoad:

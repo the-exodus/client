@@ -3,6 +3,7 @@ import * as React from 'react'
 import * as Types from '../../constants/types/fs'
 import * as Kb from '../../common-adapters'
 import * as Styles from '../../styles'
+import ChooseConversationHOC from './choose-conversation-hoc'
 import ConversationList from '../../chat/conversation-list/conversation-list-container'
 import type {Props} from '.'
 
@@ -22,9 +23,8 @@ const Header = (props: Props) => (
   </Kb.Box2>
 )
 
-const WithHeader = Kb.HeaderHoc(ConversationList)
+const WithHeader = ChooseConversationHOC(Kb.HeaderHoc(ConversationList))
 
-// $FlowIssue TODO: fix HeaderHoc typing
 export default (props: Props) => <WithHeader customComponent={<Header {...props} />} />
 
 const styles = Styles.styleSheetCreate({

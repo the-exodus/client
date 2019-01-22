@@ -65,10 +65,13 @@ export const saveMedia = 'fs:saveMedia'
 export const setFlags = 'fs:setFlags'
 export const setMoveOrCopyDestinationParentPath = 'fs:setMoveOrCopyDestinationParentPath'
 export const setMoveOrCopySource = 'fs:setMoveOrCopySource'
+export const setSendAttachmentToChatConvID = 'fs:setSendAttachmentToChatConvID'
+export const setSendAttachmentToChatFilter = 'fs:setSendAttachmentToChatFilter'
 export const setSendLinkToChatChannels = 'fs:setSendLinkToChatChannels'
 export const setSendLinkToChatConvID = 'fs:setSendLinkToChatConvID'
 export const shareNative = 'fs:shareNative'
 export const showMoveOrCopy = 'fs:showMoveOrCopy'
+export const showSendAttachmentToChat = 'fs:showSendAttachmentToChat'
 export const showSendLinkToChat = 'fs:showSendLinkToChat'
 export const sortSetting = 'fs:sortSetting'
 export const uninstallKBFSConfirm = 'fs:uninstallKBFSConfirm'
@@ -134,10 +137,13 @@ type _SaveMediaPayload = $ReadOnly<{|path: Types.Path, key: string|}>
 type _SetFlagsPayload = $ReadOnly<{|kbfsOpening?: boolean, kbfsInstalling?: boolean, fuseInstalling?: boolean, kextPermissionError?: boolean, securityPrefsPrompted?: boolean, showBanner?: boolean|}>
 type _SetMoveOrCopyDestinationParentPathPayload = $ReadOnly<{|index: number, path: Types.Path|}>
 type _SetMoveOrCopySourcePayload = $ReadOnly<{|path: Types.Path|}>
+type _SetSendAttachmentToChatConvIDPayload = $ReadOnly<{|convID: ChatTypes.ConversationIDKey|}>
+type _SetSendAttachmentToChatFilterPayload = $ReadOnly<{|filter: string|}>
 type _SetSendLinkToChatChannelsPayload = $ReadOnly<{|channels: I.Map<ChatTypes.ConversationIDKey, string>|}>
 type _SetSendLinkToChatConvIDPayload = $ReadOnly<{|convID: ChatTypes.ConversationIDKey|}>
 type _ShareNativePayload = $ReadOnly<{|path: Types.Path, key: string|}>
 type _ShowMoveOrCopyPayload = $ReadOnly<{|initialDestinationParentPath: Types.Path|}>
+type _ShowSendAttachmentToChatPayload = $ReadOnly<{|path: Types.Path, routePath?: ?I.List<string>|}>
 type _ShowSendLinkToChatPayload = $ReadOnly<{|path: Types.Path, routePath?: ?I.List<string>|}>
 type _SortSettingPayload = $ReadOnly<{|path: Types.Path, sortSetting: Types.SortSetting|}>
 type _UninstallKBFSConfirmPayload = void
@@ -203,10 +209,13 @@ export const createSaveMedia = (payload: _SaveMediaPayload) => ({payload, type: 
 export const createSetFlags = (payload: _SetFlagsPayload) => ({payload, type: setFlags})
 export const createSetMoveOrCopyDestinationParentPath = (payload: _SetMoveOrCopyDestinationParentPathPayload) => ({payload, type: setMoveOrCopyDestinationParentPath})
 export const createSetMoveOrCopySource = (payload: _SetMoveOrCopySourcePayload) => ({payload, type: setMoveOrCopySource})
+export const createSetSendAttachmentToChatConvID = (payload: _SetSendAttachmentToChatConvIDPayload) => ({payload, type: setSendAttachmentToChatConvID})
+export const createSetSendAttachmentToChatFilter = (payload: _SetSendAttachmentToChatFilterPayload) => ({payload, type: setSendAttachmentToChatFilter})
 export const createSetSendLinkToChatChannels = (payload: _SetSendLinkToChatChannelsPayload) => ({payload, type: setSendLinkToChatChannels})
 export const createSetSendLinkToChatConvID = (payload: _SetSendLinkToChatConvIDPayload) => ({payload, type: setSendLinkToChatConvID})
 export const createShareNative = (payload: _ShareNativePayload) => ({payload, type: shareNative})
 export const createShowMoveOrCopy = (payload: _ShowMoveOrCopyPayload) => ({payload, type: showMoveOrCopy})
+export const createShowSendAttachmentToChat = (payload: _ShowSendAttachmentToChatPayload) => ({payload, type: showSendAttachmentToChat})
 export const createShowSendLinkToChat = (payload: _ShowSendLinkToChatPayload) => ({payload, type: showSendLinkToChat})
 export const createSortSetting = (payload: _SortSettingPayload) => ({payload, type: sortSetting})
 export const createUninstallKBFSConfirm = (payload: _UninstallKBFSConfirmPayload) => ({payload, type: uninstallKBFSConfirm})
@@ -272,10 +281,13 @@ export type SaveMediaPayload = {|+payload: _SaveMediaPayload, +type: 'fs:saveMed
 export type SetFlagsPayload = {|+payload: _SetFlagsPayload, +type: 'fs:setFlags'|}
 export type SetMoveOrCopyDestinationParentPathPayload = {|+payload: _SetMoveOrCopyDestinationParentPathPayload, +type: 'fs:setMoveOrCopyDestinationParentPath'|}
 export type SetMoveOrCopySourcePayload = {|+payload: _SetMoveOrCopySourcePayload, +type: 'fs:setMoveOrCopySource'|}
+export type SetSendAttachmentToChatConvIDPayload = {|+payload: _SetSendAttachmentToChatConvIDPayload, +type: 'fs:setSendAttachmentToChatConvID'|}
+export type SetSendAttachmentToChatFilterPayload = {|+payload: _SetSendAttachmentToChatFilterPayload, +type: 'fs:setSendAttachmentToChatFilter'|}
 export type SetSendLinkToChatChannelsPayload = {|+payload: _SetSendLinkToChatChannelsPayload, +type: 'fs:setSendLinkToChatChannels'|}
 export type SetSendLinkToChatConvIDPayload = {|+payload: _SetSendLinkToChatConvIDPayload, +type: 'fs:setSendLinkToChatConvID'|}
 export type ShareNativePayload = {|+payload: _ShareNativePayload, +type: 'fs:shareNative'|}
 export type ShowMoveOrCopyPayload = {|+payload: _ShowMoveOrCopyPayload, +type: 'fs:showMoveOrCopy'|}
+export type ShowSendAttachmentToChatPayload = {|+payload: _ShowSendAttachmentToChatPayload, +type: 'fs:showSendAttachmentToChat'|}
 export type ShowSendLinkToChatPayload = {|+payload: _ShowSendLinkToChatPayload, +type: 'fs:showSendLinkToChat'|}
 export type SortSettingPayload = {|+payload: _SortSettingPayload, +type: 'fs:sortSetting'|}
 export type UninstallKBFSConfirmPayload = {|+payload: _UninstallKBFSConfirmPayload, +type: 'fs:uninstallKBFSConfirm'|}
@@ -343,10 +355,13 @@ export type Actions =
   | SetFlagsPayload
   | SetMoveOrCopyDestinationParentPathPayload
   | SetMoveOrCopySourcePayload
+  | SetSendAttachmentToChatConvIDPayload
+  | SetSendAttachmentToChatFilterPayload
   | SetSendLinkToChatChannelsPayload
   | SetSendLinkToChatConvIDPayload
   | ShareNativePayload
   | ShowMoveOrCopyPayload
+  | ShowSendAttachmentToChatPayload
   | ShowSendLinkToChatPayload
   | SortSettingPayload
   | UninstallKBFSConfirmPayload

@@ -37,6 +37,8 @@ type Props = {
   // Menu items
   showInSystemFileManager?: () => void,
   ignoreFolder?: () => void,
+  sendAttachment?: () => void,
+  sendLink?: () => void,
   saveMedia?: (() => void) | 'disabled',
   shareNative?: (() => void) | 'disabled',
   download?: () => void,
@@ -84,6 +86,22 @@ const Save = DownloadTrackingHoc(({downloading}) =>
 
 const makeMenuItems = (props: Props, hideMenu: () => void) => {
   return [
+    ...(props.sendLink
+      ? [
+          {
+            onClick: hideMenuOnClick(props.sendLink, hideMenu),
+            title: 'Send link to chat',
+          },
+        ]
+      : []),
+    ...(props.sendAttachment
+      ? [
+          {
+            onClick: hideMenuOnClick(props.sendAttachment, hideMenu),
+            title: 'Send attachment to chat',
+          },
+        ]
+      : []),
     ...(props.saveMedia
       ? [
           {
