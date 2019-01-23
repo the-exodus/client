@@ -23,7 +23,7 @@ const Header = (props: Props) => (
   </Kb.Box2>
 )
 
-const WithHeader = ChooseConversationHOC(Kb.HeaderHoc(ConversationList))
+const WithHeader = Kb.HeaderHoc(ChooseConversationHOC<{}>(ConversationList))
 
 export default (props: Props) => <WithHeader customComponent={<Header {...props} />} />
 

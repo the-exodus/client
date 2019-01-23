@@ -6,9 +6,13 @@ import * as Kbfs from '../common'
 import * as Styles from '../../styles'
 import type {Props} from '.'
 import ChooseConversationHOC from './choose-conversation-hoc'
-import ChooseConversation from '../../chat/conversation-list/choose-conversation'
+import ChooseConversation from '../../chat/conversation-list/choose-conversation-container'
 
-const ConversationDropdown = ChooseConversationHOC(ChooseConversation)
+type ConversationDropdownProps = {|
+  dropdownButtonStyle?: ?Styles.StylesCrossPlatform,
+|}
+
+const ConversationDropdown = ChooseConversationHOC<ConversationDropdownProps>(ChooseConversation)
 
 const SendAttachmentToChat = (props: Props) => (
   <Kb.Box2 direction="vertical" style={styles.container} centerChildren={true}>

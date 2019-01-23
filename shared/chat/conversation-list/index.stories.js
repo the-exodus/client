@@ -4,6 +4,7 @@ import * as Kb from '../../common-adapters'
 import * as Sb from '../../stories/storybook'
 import * as Styles from '../../styles'
 import * as Types from '../../constants/types/chat2'
+import * as Constants from '../../constants/chat2'
 import ChooseConversation from './choose-conversation'
 import ConversationList from './conversation-list'
 
@@ -108,6 +109,7 @@ const filter = {
   onSetFilter: Sb.action('onSetFilter'),
 }
 export const provider = {
+  ChooseConversation: (props: {}) => ({...props, selectedText: 'Choose a conversation'}),
   ConversationList: ({onSelect}: {onSelect?: () => void}) => ({
     filter,
     rows: getRows(undefined, onSelect),
@@ -125,6 +127,7 @@ export default () =>
     .add('ChooseConversation (Desktop)', () => (
       <Kb.Box2 direction="vertical" fullWidth={true} fullHeight={true} centerChildren={true}>
         <ChooseConversation
+          selected={Constants.noConversationIDKey}
           selectedText="Choose a conversation ..."
           filter=""
           onSelect={Sb.action('onSelect')}

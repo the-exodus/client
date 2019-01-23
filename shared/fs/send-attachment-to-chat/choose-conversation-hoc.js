@@ -1,7 +1,7 @@
 // @flow
+import * as React from 'react'
 import * as FsGen from '../../actions/fs-gen'
 import * as ChatTypes from '../../constants/types/chat2'
-import * as ChatConstants from '../../constants/chat2'
 import {namedConnect} from '../../util/container'
 
 const mapStateToProps = state => ({
@@ -15,32 +15,33 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   onSetFilter: (filter: string) => dispatch(FsGen.createSetSendAttachmentToChatFilter({filter})),
 })
 
-// Temporary until we make proper component for dropdown button content.
-const getConversationText = (conv: ChatTypes.ConversationMeta): string => {
-  if (conv.teamType === 'big') {
-    return conv.teamname + '#' + conv.channelname
-  }
-  if (conv.teamType === 'small') {
-    return conv.teamname
-  }
-  return ChatConstants.getRowParticipants(conv, '')
-    .toArray()
-    .join(',')
-}
-
 const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   ...ownProps,
   filter: stateProps._sendAttachmentToChat.filter,
   onSelect: dispatchProps.onSelect,
   onSetFilter: dispatchProps.onSetFilter,
   selected: stateProps._sendAttachmentToChat.convID,
-  selectedText: stateProps._conv ? getConversationText(stateProps._conv) : 'Choose a conversation',
 })
 
-// TODO: type this
-export default namedConnect<any, _, any, _, _>(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps,
-  'ChooseConversationHOC'
-)
+type InjectedProps = {
+  filter?: string,
+  onSelect: (convID: ChatTypes.ConversationIDKey) => void,
+  onSetFilter?: (filter: string) => void,
+  selected: ChatTypes.ConversationIDKey,
+}
+
+type WithInjectedProps<OriginalProps> = {|
+  ...$Exact<OriginalProps>,
+  ...$Exact<InjectedProps>,
+|}
+
+export default function<WrappedOwnProps>(
+  component: React.ComponentType<WithInjectedProps<WrappedOwnProps>>
+): React.AbstractComponent<WrappedOwnProps> {
+  return namedConnect<WrappedOwnProps, _, _, _, _>(
+    mapStateToProps,
+    mapDispatchToProps,
+    mergeProps,
+    'ChooseConversationHOC'
+  )(component)
+}

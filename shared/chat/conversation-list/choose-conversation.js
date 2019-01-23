@@ -7,10 +7,10 @@ import ConversationList from './conversation-list-container'
 
 type Props = {|
   dropdownButtonStyle?: ?Styles.StylesCrossPlatform,
-  overlayStyle?: ?Styles.StylesCrossPlatform,
   filter?: string,
   onSelect: (conversationIDKey: Types.ConversationIDKey) => void,
   onSetFilter?: (filter: string) => void,
+  selected: Types.ConversationIDKey,
   selectedText: string, // TODO: make this pretty
 |}
 
@@ -41,13 +41,14 @@ class ChooseConversation extends React.Component<Props & Kb.OverlayParentProps, 
           attachTo={this.props.getAttachmentRef}
           onHidden={this._toggleOpen}
           position={'center center'}
-          style={Styles.collapseStyles([styles.overlay, this.props.overlayStyle])}
+          style={styles.overlay}
           visible={this.state.expanded}
         >
           <ConversationList
             onSelect={this._onSelect}
             filter={this.props.filter}
             onSetFilter={this.props.onSetFilter}
+            selected={this.props.selected}
           />
         </Kb.Overlay>
       </>

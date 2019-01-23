@@ -12,7 +12,7 @@ type OwnProps = {|
   filter?: string,
   onSelect: (conversationIDKey: Types.ConversationIDKey) => void,
   onSetFilter?: (filter: string) => void,
-  selected?: ?Types.ConversationIDKey, // mobile only
+  selected: Types.ConversationIDKey, // mobile only
 |}
 
 const notificationsTypeToNumber = (t: Types.NotificationsType): number => {
