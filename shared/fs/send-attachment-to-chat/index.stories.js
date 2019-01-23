@@ -16,7 +16,7 @@ export const provider = Sb.createPropProviderWithCommon({
     onSelect: Sb.action('onSelect'),
     onSetFilter: Sb.action('onSetFilter'),
     selected: ChatConstants.noConversationIDKey,
-    selectedText: 'Choose a converation',
+    selectedText: 'Choose a conversation',
   }),
 })
 
