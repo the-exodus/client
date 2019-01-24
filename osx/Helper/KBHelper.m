@@ -176,6 +176,9 @@
   if (!p.absolutePath) {
     return NO;
   }
+  if ([KBFSUtils checkIfPathIsFishy:path]) {
+    return NO;
+  }
   NSArray *a = [p componentsSeparatedByString:@"/"];
   if (a.count != 3) {
     return NO;
@@ -385,7 +388,6 @@
     NSString *neededPrefix = @"/Applications/Keybase.app";
 
     if ([KBFSUtils checkAbsolutePath:path hasAbsolutePrefix:neededPrefix]) {
-
       KBLog(@"Allowing creation of symlink %@ -> %@ since it's in %@", linkPath, path, neededPrefix);
 
       // Fix the link
