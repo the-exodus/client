@@ -228,44 +228,48 @@ export default function(state: Types.State = initialState, action: FsGen.Actions
         ]
       )
     case FsGen.newFolderName:
-      // $FlowFixMe
-      return state.updateIn(
-        ['edits', action.payload.editID],
-        editItem => editItem && editItem.set('name', action.payload.name)
+      return state.update('edits', edits =>
+        edits.update(action.payload.editID, edit => edit && edit.set('name', action.payload.name))
       )
     case FsGen.commitEdit:
-      // $FlowFixMe
-      return state.setIn(['edits', action.payload.editID, 'status'], 'saving')
+      return state.update('edits', edits =>
+        edits.update(action.payload.editID, edit => edit.set('status', 'saving'))
+      )
     case FsGen.discardEdit:
-      // $FlowFixMe
-      return state.removeIn(['edits', action.payload.editID])
+      return state.update('edits', edits => edits.remove(action.payload.editID))
     case FsGen.fsError:
       const {erroredAction, error} = action.payload.error
       logger.error('error (fs)', erroredAction.type, error)
-      const nextState: Types.State = state.setIn(['errors', Constants.makeUUID()], action.payload.error)
+
+      const nextState = state.update('errors', errors =>
+        errors.set(Constants.makeUUID(), action.payload.error)
+      )
 
       switch (erroredAction.type) {
         case FsGen.commitEdit:
-          // $FlowFixMe
-          return nextState.setIn(['edits', erroredAction.payload.editID, 'status'], 'failed')
+          return nextState.update('edits', edits =>
+            edits.update(erroredAction.payload.editID, edit => edit.set('status', 'failed'))
+          )
         case FsGen.upload:
-          // $FlowFixMe
-          return nextState.setIn(
-            [
-              'uploads',
-              'errors',
-              Constants.getUploadedPath(erroredAction.payload.parentPath, erroredAction.payload.localPath),
-            ],
-            error
+          return nextState.update('uploads', uploads =>
+            uploads.update('errors', errors =>
+              errors.set(
+                Constants.getUploadedPath(erroredAction.payload.parentPath, erroredAction.payload.localPath),
+                action.payload.error
+              )
+            )
           )
         case FsGen.download:
           if (erroredAction.payload.intent !== 'none') {
             return nextState
           }
-          // $FlowFixMe
-          return nextState.updateIn(
-            ['downloads', erroredAction.payload.key, 'state'],
-            original => original && original.set('isDone', true).set('error', error)
+          return nextState.update('downloads', downloads =>
+            downloads.update(
+              erroredAction.payload.key,
+              download =>
+                download &&
+                download.update('state', ds => ds.set('isDone', true).set('error', action.payload.error))
+            )
           )
         default:
           return nextState
@@ -292,17 +296,21 @@ export default function(state: Types.State = initialState, action: FsGen.Actions
     case FsGen.showSendLinkToChat:
       return state.set('sendLinkToChat', Constants.makeSendLinkToChat({path: action.payload.path}))
     case FsGen.setSendLinkToChatConvID:
-      // $FlowIssue
-      return state.setIn(['sendLinkToChat', 'convID'], action.payload.convID)
+      return state.update('sendLinkToChat', sendLinkToChat =>
+        sendLinkToChat.set('convID', action.payload.convID)
+      )
     case FsGen.setSendLinkToChatChannels:
-      // $FlowIssue
-      return state.setIn(['sendLinkToChat', 'channels'], action.payload.channels)
+      return state.update('sendLinkToChat', sendLinkToChat =>
+        sendLinkToChat.set('channels', action.payload.channels)
+      )
     case FsGen.setSendAttachmentToChatConvID:
-      // $FlowIssue
-      return state.setIn(['sendAttachmentToChat', 'convID'], action.payload.convID)
+      return state.update('sendAttachmentToChat', sendAttachmentToChat =>
+        sendAttachmentToChat.set('convID', action.payload.convID)
+      )
     case FsGen.setSendAttachmentToChatFilter:
-      // $FlowIssue
-      return state.setIn(['sendAttachmentToChat', 'filter'], action.payload.filter)
+      return state.update('sendAttachmentToChat', sendAttachmentToChat =>
+        sendAttachmentToChat.set('filter', action.payload.filter)
+      )
 
     case FsGen.folderListLoad:
     case FsGen.placeholderAction:
