@@ -21,6 +21,7 @@ import (
 	"github.com/keybase/client/go/logger"
 	"github.com/keybase/client/go/protocol/keybase1"
 	"github.com/keybase/go-framed-msgpack-rpc/rpc"
+	"github.com/stretchr/testify/require"
 	"golang.org/x/net/context"
 )
 
@@ -762,8 +763,10 @@ func TestKBFSOpsConcurBlockSyncTruncate(t *testing.T) {
 	}
 
 	lastKMD := km.getLastKMD()
+	lastRMD, ok := lastKMD.(ReadOnlyRootMetadata)
+	require.True(t, ok)
 
-	if md.ReadOnlyRootMetadata != lastKMD {
+	if md.ReadOnlyRootMetadata != lastRMD {
 		t.Error("Last MD seen by key manager != head")
 	}
 }
