@@ -455,6 +455,8 @@ func AccountDetailsToWalletAccountLocal(mctx libkb.MetaContext, accountID stella
 		BalanceDescription: balance,
 		Seqno:              details.Seqno,
 		AccountMode:        accountMode,
+		IsFunded:           len(details.Balances) > 0,
+		CanMakeTx:          len(details.Balances) > 0,
 	}
 
 	conf, err := mctx.G().GetStellar().GetServerDefinitions(mctx.Ctx())

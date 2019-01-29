@@ -218,6 +218,8 @@ export type _Account = {
   displayCurrency: Currency,
   isDefault: boolean,
   name: string,
+  isFunded: boolean,
+  canMakeTx: boolean,
 }
 export type Account = I.RecordOf<_Account>
 

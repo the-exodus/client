@@ -14,6 +14,8 @@ protocol local {
     string seqno;               // the stellar sequence number for this account
     CurrencyLocal currencyLocal;// user configurable, defaults to USD and related details
     AccountMode accountMode;    // mobile only vs all devices
+    boolean isFunded;           // does the account have min amount of XLM (exists on the network)
+    boolean canMakeTx;          // does the account have enough XLM for a transaction fee
   }
   array<WalletAccountLocal> getWalletAccountsLocal(int sessionID);
   WalletAccountLocal getWalletAccountLocal(int sessionID, AccountID accountID);
