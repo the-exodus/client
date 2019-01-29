@@ -10,6 +10,7 @@ import (
 	"github.com/keybase/client/go/protocol/stellar1"
 	"github.com/keybase/client/go/stellar/relays"
 	"github.com/keybase/client/go/stellar/remote"
+	"github.com/keybase/stellarnet"
 )
 
 // TransformPaymentSummaryGeneric converts a stellar1.PaymentSummary (p) into a
@@ -448,6 +449,9 @@ func AccountDetailsToWalletAccountLocal(mctx libkb.MetaContext, accountID stella
 		return empty, err
 	}
 
+	// Is there enough to make any transaction?
+	canMakeTx := SubtractFeeSoft(mctx, details.Available) != stellarnet.StringFromStellarAmount(0)
+
 	acct := stellar1.WalletAccountLocal{
 		AccountID:          accountID,
 		IsDefault:          isPrimary,
@@ -455,8 +459,8 @@ func AccountDetailsToWalletAccountLocal(mctx libkb.MetaContext, accountID stella
 		BalanceDescription: balance,
 		Seqno:              details.Seqno,
 		AccountMode:        accountMode,
-		IsFunded:           len(details.Balances) > 0,
-		CanMakeTx:          len(details.Balances) > 0,
+		IsFunded:           len(details.Balances) != 0,
+		CanMakeTx:          canMakeTx,
 	}
 
 	conf, err := mctx.G().GetStellar().GetServerDefinitions(mctx.Ctx())
