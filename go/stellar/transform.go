@@ -441,7 +441,8 @@ func RemotePendingToLocal(mctx libkb.MetaContext, remoter remote.Remoter, accoun
 	return payments, nil
 }
 
-func AccountDetailsToWalletAccountLocal(mctx libkb.MetaContext, accountID stellar1.AccountID, details stellar1.AccountDetails, isPrimary bool, accountName string, accountMode stellar1.AccountMode) (stellar1.WalletAccountLocal, error) {
+func AccountDetailsToWalletAccountLocal(mctx libkb.MetaContext, accountID stellar1.AccountID, details stellar1.AccountDetails,
+	isPrimary bool, accountName string, accountMode stellar1.AccountMode) (stellar1.WalletAccountLocal, error) {
 
 	var empty stellar1.WalletAccountLocal
 	balance, err := balanceList(details.Balances).balanceDescription()
@@ -450,7 +451,16 @@ func AccountDetailsToWalletAccountLocal(mctx libkb.MetaContext, accountID stella
 	}
 
 	// Is there enough to make any transaction?
-	canMakeTx := SubtractFeeSoft(mctx, details.Available) != stellarnet.StringFromStellarAmount(0)
+	availableInt, err := stellarnet.ParseStellarAmount(details.Available)
+	if err != nil {
+		return empty, err
+	}
+	canMakeTx := availableInt > 100 // base fee is 100
+	// TODO: this is something that stellard can just tell us.
+	isFunded, err := hasPositiveLumenBalance(details.Balances)
+	if err != nil {
+		return empty, err
+	}
 
 	acct := stellar1.WalletAccountLocal{
 		AccountID:          accountID,
@@ -459,7 +469,7 @@ func AccountDetailsToWalletAccountLocal(mctx libkb.MetaContext, accountID stella
 		BalanceDescription: balance,
 		Seqno:              details.Seqno,
 		AccountMode:        accountMode,
-		IsFunded:           len(details.Balances) != 0,
+		IsFunded:           isFunded,
 		CanMakeTx:          canMakeTx,
 	}
 
